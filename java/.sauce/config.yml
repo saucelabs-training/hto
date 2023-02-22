@@ -1,0 +1,11 @@
+apiVersion: v1alpha
+kind: imagerunner
+sauce:
+region: us-west-1
+suites:
+  - name: Hosted Test Orchestration Demo
+    image: $DOCKER_IMAGE
+    entrypoint: "mvn test"
+    imagePullAuth:
+      user: $DOCKER_USERNAME
+      token: $DOCKER_PASSWORD
