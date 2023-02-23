@@ -1,0 +1,31 @@
+name: Run Java examples
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'java/**'
+
+env:
+  DISPLAY: :99
+  SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+  SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+
+jobs:
+  remote:
+    name: Run Tests remotely on Sauce Labs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - name: Remote Execution
+        run: |
+          cd java
+          mvn -B test

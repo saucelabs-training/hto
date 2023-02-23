@@ -1,4 +1,4 @@
-# Photon Examples
+# Hosted Test Orchestration Examples
 
 Sauce Labs has an exciting new feature for running your tests with [Hosted Orchestration](https://docs.saucelabs.com/hosted-orchestration/running-tests/)
 
@@ -8,7 +8,7 @@ Please see the README in the language you want to work with:
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/saucelabs-training/photon. 
+Bug reports and pull requests are welcome on GitHub at https://github.com/saucelabs-training/hto. 
 
 ## License
 
