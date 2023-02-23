@@ -15,7 +15,7 @@ env:
 
 jobs:
   remote:
-    name: Run Tests remotely on Sauce Labs
+    name: Run Tests Remotely on Sauce Labs
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -28,4 +28,21 @@ jobs:
       - name: Remote Execution
         run: |
           cd java
-          mvn -B test
+          mvn -B test -Dselenium.parallel=15 -Dselenium.platform=sauce
+  local:
+    name: Run Tests Locally
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 11
+      - name: Start Xvfb
+        run: Xvfb :99 &
+      - name: Local Execution
+        run: |
+          cd java
+          mvn -B test -Dselenium.platform=local
