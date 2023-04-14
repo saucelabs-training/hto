@@ -48,8 +48,7 @@ If Docker is not running you get an error like:
 ## Kick off these tests from Local Machine
 
 ### Local
-Run these tests without Docker and without Sauce.
-This will open 10 instances of Chrome and execute tests in under a minute.
+This skips Sauce Labs all together and runs your tests on your local machine without parallel:
 
 ```shell
 mvn clean test
