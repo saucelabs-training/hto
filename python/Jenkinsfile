@@ -1,0 +1,39 @@
+pipeline{
+
+	agent any
+
+	environment {
+	    SAUCE_CREDENTIALS = credentials('saucelabs')
+		DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        SAUCE_USERNAME = sh(script: 'echo $SAUCE_CREDENTIALS_USR', returnStdout: true).trim()
+        SAUCE_ACCESS_KEY = sh(script: 'echo $SAUCE_CREDENTIALS_PWD', returnStdout: true).trim()
+		GIT_COMMIT_SHA = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+		DOCKER_NAME = sh(script: 'echo $DOCKERHUB_CREDENTIALS_USR/hto-demo-python', returnStdout: true).trim()
+		DOCKER_IMAGE = "${env.DOCKER_NAME}:${env.GIT_COMMIT_SHA}"
+}
+
+	stages {
+		stage('Build and Push') {
+			steps {
+                dir('python') {
+                    script {
+                        def dockerImage = docker.build("${env.DOCKER_IMAGE}")
+                        withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
+                            dockerImage.push()
+                        }
+                    }
+                }
+			}
+		}
+
+		stage('Orchestrate') {
+            steps {
+                dir('python') {
+                    echo 'Running Hosted Python Orchestration'
+                    sh 'npm install saucectl'
+                    sh 'npx saucectl run'
+                }
+			}
+		}
+	}
+}
