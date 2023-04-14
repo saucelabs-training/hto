@@ -10,10 +10,50 @@ on:
 
 env:
   DISPLAY: :99
-  SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
+  SAUCE_USERNAME: ${{ vars.SAUCE_USERNAME }}
   SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
+  DOCKER_USERNAME: ${{ vars.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
 jobs:
+  docker_hub:
+    name: Setup Container
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ vars.DOCKER_USERNAME }}/hto-demo-java
+          tags: type=sha
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./java
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+  orchestrated:
+    name: Run Tests Hosted by Sauce Labs
+    needs: docker_hub
+    runs-on: ubuntu-latest
+    container: saucelabs/saucectl:latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Run Saucectl
+        env:
+          DOCKER_IMAGE: ${{ needs.docker_hub.outputs.tag }}
+        working-directory: java
+        run: saucectl run
   remote:
     name: Run Tests Remotely on Sauce Labs
     runs-on: ubuntu-latest
