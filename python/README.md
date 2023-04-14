@@ -7,62 +7,13 @@ This code shows you how to execute tests three different ways:hosted by Sauce La
 
 ## Prerequisites
 
-### Sauce Labs
-1. Get your [username and access key](https://app.saucelabs.com/user-settings)
-2. [Set an environment variable](https://docs.saucelabs.com/basics/environment-variables/#setting-up-environment-variables) for Sauce Labs Username as `SAUCE_USERNAME`
-3. [Set an environment variable](https://docs.saucelabs.com/basics/environment-variables/#setting-up-environment-variables) for Sauce Labs Access Key as `SAUCE_ACESS_KEY`
+Please see the primary [README](../README.md) for the common prerequisites.
 
-### Docker Hub
-1. [Create an account](https://hub.docker.com/signup)
-2. [Set an environment variable](https://docs.saucelabs.com/basics/environment-variables/#setting-up-environment-variables) for Docker Hub Username as `DOCKER_USERNAME`
-3. [Set an environment variable](https://docs.saucelabs.com/basics/environment-variables/#setting-up-environment-variables) for Docker Hub Password as `DOCKER_PASSWORD`
+## Kick off tests from Github Actions
 
-### Git
-1. Install [Git](https://git-scm.com/doc)
-
-### Download this code
-1. [Fork this Repo](https://github.com/saucelabs-training/hto/fork) on GitHub
-2. Go to your new fork, click the big green "Code" button and copy the https line
-3. Make a new directory for your projects if you don't have one already
-   ```shell
-   mkdir ~/projects
-   ```
-4. Clone from your fork onto your machine
-   ```shell
-   cd ~/projects
-   git clone <LINK_COPIED_IN_STEP_2>
-   ```
-
-### Install and Run Docker Desktop
-1. [Download](https://docs.docker.com/get-docker/)
-2. Open the application
-3. In a terminal run this to make sure it is running:
-   ```shell
-   docker info
-   ```
-If Docker is not running you get an error like:
-   ```text
-   ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
-   ```
+Please see the primary [README](../README.md) for the instructions on how to execute these tests on Github Actions.
 
 ## Kick off these tests from Local Machine
-
-### Locally
-This skips Sauce Labs all together and runs your tests on your local machine without parallel:
-
-```shell
-pytest --selenium local
-```
-
-### Remotely on Sauce Labs
-This is the traditional way of running tests on Sauce Labs.
-
-This repo uses pytest and pytest-xdist for running tests in parallel. Specify the amount of parallel execution with `-n`.
-This will run all 15 tests in parallel:
-
-```shell
-pytest -n 15
-```
 
 ### Hosted by Sauce Labs
 This is the exciting new way to run your tests on Sauce Labs.
@@ -93,6 +44,23 @@ is going to be some overhead for the container to get loaded and the tests to st
     ```shell
     saucectl run
     ```
+
+### Locally
+This skips Sauce Labs all together and runs your tests on your local machine without parallel:
+
+```shell
+pytest --selenium local
+```
+
+### Remotely on Sauce Labs
+This is the traditional way of running tests on Sauce Labs.
+
+This repo uses pytest and pytest-xdist for running tests in parallel. Specify the amount of parallel execution with `-n`.
+This will run all 15 tests in parallel:
+
+```shell
+pytest -n 15
+```
 
 ## Contributing
 
